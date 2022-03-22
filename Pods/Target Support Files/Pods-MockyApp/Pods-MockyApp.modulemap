@@ -1,0 +1,6 @@
+module Pods_MockyApp {
+  umbrella header "Pods-MockyApp-umbrella.h"
+
+  export *
+  module * { export * }
+}

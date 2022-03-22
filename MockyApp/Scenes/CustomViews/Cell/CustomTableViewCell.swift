@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class CustomTableViewCell: UITableViewCell {
 
@@ -24,9 +25,12 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func setup(with founder: Founder) {
-        photoImageView.downloaded(from: founder.photo, contentMode: .scaleAspectFill)
         nameLabel.text = founder.name
         companyLabel.text = founder.company.name
+        
+        let url = URL(string: founder.photo)
+        
+        photoImageView.kf.setImage(with: url)
         
         photoImageView.layer.cornerRadius = 35 ;
         photoImageView.clipsToBounds = true;

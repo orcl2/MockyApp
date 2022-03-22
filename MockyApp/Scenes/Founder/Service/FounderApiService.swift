@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 struct FounderApiService {
     
@@ -19,29 +20,11 @@ struct FounderApiService {
     }
     
     private func fetchFounders(with url: URL) {
-        let session = URLSession.shared
-        let task = session.dataTask(with: url) { data, urlResponse, Error in
+        AF.request(url, method: .get).validate().responseDecodable(of: [Founder].self, queue: DispatchQueue.main) { dataResponse in
             
-            if let data = data {
-                let founders = parseFounderFromJson(data)
-                
-                DispatchQueue.main.async {
-                    delegate?.updateDatasource(with: founders)
-                }
-            }
+            guard let founders = dataResponse.value else { return }
+            
+            self.delegate?.updateDatasource(with: founders)
         }
-        
-        task.resume()
-    }
-    
-    private func parseFounderFromJson(_ data: Data) -> [Founder] {
-        var founders: [Founder] = []
-        
-        let jsonDecoder = JSONDecoder()
-        if let results = try? jsonDecoder.decode([Founder].self, from: data) {
-            founders = results
-        }
-        
-        return founders
     }
 }
